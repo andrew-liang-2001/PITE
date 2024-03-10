@@ -5,11 +5,14 @@ from qiskit_nature.second_q.hamiltonians.lattices import LineLattice, BoundaryCo
 import qiskit_nature.second_q.hamiltonians as h
 import matplotlib.pyplot as plt
 from qiskit_aer import Aer
-from qiskit.quantum_info import Statevector, Pauli, partial_trace, random_statevector
+from qiskit.quantum_info import Statevector, Pauli, partial_trace
 from qiskit.quantum_info.operators import Operator
-from qiskit.visualization import plot_histogram
-backend = Aer.get_backend("statevector_simulator")
+import scienceplots
+plt.style.use('science')
 
+from qiskit.visualization import plot_histogram
+
+backend = Aer.get_backend("statevector_simulator")
 
 # def generate_circuits(Pauli_op, phi) -> [QuantumCircuit]:
 #     """
@@ -92,12 +95,14 @@ diagonalised_FHM = np.linalg.eigh(qubit_jw_op.to_matrix())
 print(f"Number of Pauli strings: {len(qubit_jw_op)}")
 print(qubit_jw_op)
 
-n_trotter_steps = 1
 
 # %%
 
-def generate_circuit(Statevector, Pauli):
-    if Pauli == "IYZY":
+def generate_circuit(Statevector, Pauli) -> QuantumCircuit:
+    gamma = Pauli[1]
+    phi = 2 * np.arccos(np.exp(-2 * np.abs(gamma) * delta_tau))
+
+    if Pauli[0] == "IYZY":
         IYZY = QuantumCircuit(QuantumRegister(1, "anc"), QuantumRegister(4), ClassicalRegister(1, "c"))
         IYZY.initialize(Statevector, [1, 2, 3, 4])
         IYZY.sdg(2)
@@ -107,7 +112,6 @@ def generate_circuit(Statevector, Pauli):
         IYZY.cx(2, 3)
         IYZY.cx(3, 4)
         IYZY.crx(phi, 4, 0)
-        IYZY.measure(0, 0)
         IYZY.cx(3, 4)
         IYZY.cx(2, 3)
         IYZY.h(4)
@@ -115,7 +119,7 @@ def generate_circuit(Statevector, Pauli):
         IYZY.h(2)
         IYZY.s(2)
         return IYZY
-    elif Pauli == "IXZX":
+    elif Pauli[0] == "IXZX":
         IXZX = QuantumCircuit(QuantumRegister(1, "anc"), QuantumRegister(4), ClassicalRegister(1))
         IXZX.initialize(Statevector, [1, 2, 3, 4])
         IXZX.h(2)
@@ -123,33 +127,30 @@ def generate_circuit(Statevector, Pauli):
         IXZX.cx(2, 3)
         IXZX.cx(3, 4)
         IXZX.crx(phi, 4, 0)
-        IXZX.measure(0, 0)
         IXZX.cx(3, 4)
         IXZX.cx(2, 3)
         IXZX.h(4)
         IXZX.h(2)
         return IXZX
-    elif Pauli == "IIII":
+    elif Pauli[0] == "IIII":
         IIII = QuantumCircuit(QuantumRegister(1, "anc"), QuantumRegister(4), ClassicalRegister(1))
         IIII.initialize(Statevector, [1, 2, 3, 4])
         return IIII
-    elif Pauli == "IIIZ":
+    elif Pauli[0] == "IIIZ":
         IIIZ = QuantumCircuit(QuantumRegister(1, "anc"), QuantumRegister(4), ClassicalRegister(1))
         IIIZ.initialize(Statevector, [1, 2, 3, 4])
         IIIZ.x(4)
         IIIZ.crx(phi, 4, 2)
         IIIZ.x(4)
-        IIIZ.measure(0, 0)
         return IIIZ
-    elif Pauli == "IZII":
+    elif Pauli[0] == "IZII":
         IZII = QuantumCircuit(QuantumRegister(1, "anc"), QuantumRegister(4), ClassicalRegister(1))
         IZII.initialize(Statevector, [1, 2, 3, 4])
         IZII.x(2)
         IZII.crx(phi, 2, 3)
         IZII.x(2)
-        IZII.measure(0, 0)
         return IZII
-    elif Pauli == "YZYI":
+    elif Pauli[0] == "YZYI":
         YZYI = QuantumCircuit(QuantumRegister(1, "anc"), QuantumRegister(4), ClassicalRegister(1))
         YZYI.initialize(Statevector, [1, 2, 3, 4])
         YZYI.sdg(1)
@@ -159,7 +160,6 @@ def generate_circuit(Statevector, Pauli):
         YZYI.cx(1, 2)
         YZYI.cx(2, 3)
         YZYI.crx(phi, 3, 0)
-        YZYI.measure(0, 0)
         YZYI.cx(2, 3)
         YZYI.cx(1, 2)
         YZYI.h(3)
@@ -167,7 +167,7 @@ def generate_circuit(Statevector, Pauli):
         YZYI.h(1)
         YZYI.s(1)
         return YZYI
-    elif Pauli == "XZXI":
+    elif Pauli[0] == "XZXI":
         XZXI = QuantumCircuit(QuantumRegister(1, "anc"), QuantumRegister(4), ClassicalRegister(1))
         XZXI.initialize(Statevector, [1, 2, 3, 4])
         XZXI.h(1)
@@ -175,90 +175,81 @@ def generate_circuit(Statevector, Pauli):
         XZXI.cx(1, 2)
         XZXI.cx(2, 3)
         XZXI.crx(phi, 3, 0)
-        XZXI.measure(0, 0)
         XZXI.cx(2, 3)
         XZXI.cx(1, 2)
         XZXI.h(3)
         XZXI.h(1)
         return XZXI
-    elif Pauli == "IIZI":
+    elif Pauli[0] == "IIZI":
         IIZI = QuantumCircuit(QuantumRegister(1, "anc"), QuantumRegister(4), ClassicalRegister(1))
         IIZI.initialize(Statevector, [1, 2, 3, 4])
         IIZI.x(3)
         IIZI.crx(phi, 3, 0)
         IIZI.x(3)
-        IIZI.measure(0, 0)
         return IIZI
-    elif Pauli == "ZIII":
+    elif Pauli[0] == "ZIII":
         ZIII = QuantumCircuit(QuantumRegister(1, "anc"), QuantumRegister(4), ClassicalRegister(1))
         ZIII.initialize(Statevector, [1, 2, 3, 4])
         ZIII.x(1)
         ZIII.crx(phi, 1, 0)
         ZIII.x(1)
-        ZIII.measure(0, 0)
         return ZIII
-    elif Pauli == "IIZZ":
+    elif Pauli[0] == "IIZZ":
         IIZZ = QuantumCircuit(QuantumRegister(1, "anc"), QuantumRegister(4), ClassicalRegister(1))
         IIZZ.initialize(Statevector, [1, 2, 3, 4])
         IIZZ.cx(3, 4)
         IIZZ.x(4)
         IIZZ.crx(phi, 4, 0)
         IIZZ.x(4)
-        IIZZ.measure(0, 0)
         IIZZ.cx(3, 4)
         return IIZZ
-    elif Pauli == "ZZII":
+    elif Pauli[0] == "ZZII":
         ZZII = QuantumCircuit(QuantumRegister(1, "anc"), QuantumRegister(4), ClassicalRegister(1))
         ZZII.initialize(Statevector, [1, 2, 3, 4])
         ZZII.cx(1, 2)
         ZZII.x(2)
         ZZII.crx(phi, 2, 0)
         ZZII.x(2)
-        ZZII.measure(0, 0)
         ZZII.cx(1, 2)
         return ZZII
 
+
 # %%
-job = backend.run(IYZY)
 
-statevector = job.result().get_statevector()
-# keep only every second element of the statevector to get the reduced state
-reduced_state = statevector.data[::2]/np.linalg.norm(statevector.data[::2])
-reduced_state = Statevector(reduced_state)
 
-pauli_zz = Pauli('IYZY')
-operator_zz = Operator(pauli_zz)
-expectation_value = reduced_state.expectation_value(operator_zz)
-print(expectation_value)
 
- # %%
-
-FHM_circuits = ["IYZY", "IXZX", "IIII", "IIIZ", "IZII", "YZYI", "XZXI", "IIZI", "ZIII", "IIZZ", "ZZII"]
+# %%
 statevector = Statevector.from_label("0000")
 Pauli_expectations = []
+Energy = []
 
-for _ in range(n_trotter_steps):
-    for circuit_str in FHM_circuits:
-        circ = generate_circuit(statevector, circuit_str)
-        circ = transpile(circ, backend, basis_gates=["sdg", "s", "h", "cx", "ry", "measure"])
-        job = backend.run(circ)
-        result = job.result()
-        statevector = result.get_statevector()
-        print(statevector.data)
-        reduced_state = statevector.data[::2] / np.linalg.norm(statevector.data[::2])
-        statevector = Statevector(reduced_state)  # overwrite the statevector with the reduced state
-        pauli = Pauli(circuit_str)
-        operator = Operator(pauli)
-        expectation_value = statevector.expectation_value(operator)
-        Pauli_expectations.append(expectation_value)
-        print(f"Done with {circuit_str} with expectation value {expectation_value}")
+n_trotter_steps = 60
 
 
 def compute_Hamiltonian_energy(Pauli_expectations, coefficients):
-    return np.dot(Pauli_expectations, coefficients)
+    return np.dot(Pauli_expectations, coefficients).real
 
-print(compute_Hamiltonian_energy(Pauli_expectations, qubit_jw_op.coeffs))
 
+for _ in range(n_trotter_steps):
+    for Pauli_coeff_tuple in qubit_jw_op.to_list():
+        circ = generate_circuit(statevector, Pauli_coeff_tuple)
+        circ = transpile(circ, backend, basis_gates=["sdg", "s", "h", "cx", "ry"])
+        job = backend.run(circ)
+        result = job.result()
+        statevector = result.get_statevector()
+        reduced_state = statevector.data[::2] / np.linalg.norm(statevector.data[::2])
+        statevector = Statevector(reduced_state)  # overwrite the statevector with the reduced state
+        pauli = Pauli(Pauli_coeff_tuple[0])
+        operator = Operator(pauli)
+        expectation_value = statevector.expectation_value(operator)
+        Pauli_expectations.append(expectation_value)
+        print(f"Done with {Pauli_coeff_tuple[0]} with expectation value {expectation_value}")
+    Energy.append(compute_Hamiltonian_energy(Pauli_expectations, qubit_jw_op.coeffs))
+    Pauli_expectations = []
+
+# %%
+plt.plot(np.arange(0, n_trotter_steps), Energy)
+plt.savefig("plots/energy_vs_trotter_steps.pdf", format="pdf", bbox_inches="tight")
 
 # %%
 # initial state preparation for 2 site 1D Hubbard model
@@ -275,20 +266,9 @@ FHM_init.cx(3, 4)
 FHM_init.draw("mpl")
 plt.show()
 
-# %%
-n_trotter_steps
-
-
-# %%
-
-def compute_energy(statevector, pauli_string):
-    return np.dot(np.conj(statevector), hamiltonian @ statevector).real
-
-# %% Generate circuits for each Pauli string.
 
 # %%
 np.linalg.eigvalsh(qubit_jw_op.to_matrix())
-
 
 # %% Test circuit to figure out the correct ordering of the qubits.
 
