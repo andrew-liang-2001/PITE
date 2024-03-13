@@ -1,0 +1,113 @@
+Index: .idea/workspace.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<project version=\"4\">\n  <component name=\"AutoImportSettings\">\n    <option name=\"autoReloadType\" value=\"SELECTIVE\" />\n  </component>\n  <component name=\"ChangeListManager\">\n    <list default=\"true\" id=\"897876e3-3587-4317-b1da-ea2e97d09b7a\" name=\"Changes\" comment=\"snapshot before shifting the circuits\">\n      <change afterPath=\"$PROJECT_DIR$/additional_analysis.py\" afterDir=\"false\" />\n      <change afterPath=\"$PROJECT_DIR$/test.py\" afterDir=\"false\" />\n      <change beforePath=\"$PROJECT_DIR$/.idea/workspace.xml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/.idea/workspace.xml\" afterDir=\"false\" />\n      <change beforePath=\"$PROJECT_DIR$/generator.py\" beforeDir=\"false\" />\n      <change beforePath=\"$PROJECT_DIR$/hardcoded_circuits.py\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/tools.py\" afterDir=\"false\" />\n      <change beforePath=\"$PROJECT_DIR$/main.py\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/main.py\" afterDir=\"false\" />\n    </list>\n    <option name=\"SHOW_DIALOG\" value=\"false\" />\n    <option name=\"HIGHLIGHT_CONFLICTS\" value=\"true\" />\n    <option name=\"HIGHLIGHT_NON_ACTIVE_CHANGELIST\" value=\"false\" />\n    <option name=\"LAST_RESOLUTION\" value=\"IGNORE\" />\n  </component>\n  <component name=\"FileTemplateManagerImpl\">\n    <option name=\"RECENT_TEMPLATES\">\n      <list>\n        <option value=\"Python Script\" />\n      </list>\n    </option>\n  </component>\n  <component name=\"Git.Settings\">\n    <option name=\"RECENT_BRANCH_BY_REPOSITORY\">\n      <map>\n        <entry key=\"$PROJECT_DIR$\" value=\"master\" />\n      </map>\n    </option>\n    <option name=\"RECENT_GIT_ROOT_PATH\" value=\"$PROJECT_DIR$\" />\n  </component>\n  <component name=\"GitHubPullRequestSearchHistory\">{\n  &quot;lastFilter&quot;: {\n    &quot;state&quot;: &quot;OPEN&quot;,\n    &quot;assignee&quot;: &quot;andrew-liang-2001&quot;\n  }\n}</component>\n  <component name=\"GithubPullRequestsUISettings\">\n    <option name=\"selectedUrlAndAccountId\">\n      <UrlAndAccount>\n        <option name=\"accountId\" value=\"d8578f25-b873-4412-aa49-e86089af68c8\" />\n        <option name=\"url\" value=\"https://github.com/andrew-liang-2001/PITE.git\" />\n      </UrlAndAccount>\n    </option>\n  </component>\n  <component name=\"MacroExpansionManager\">\n    <option name=\"directoryName\" value=\"8emu7olc\" />\n  </component>\n  <component name=\"ProjectColorInfo\">{\n  &quot;associatedIndex&quot;: 3\n}</component>\n  <component name=\"ProjectId\" id=\"2cTO88FrhS2LAZ10nPe57ifNwp2\" />\n  <component name=\"ProjectLevelVcsManager\" settingsEditedManually=\"true\">\n    <ConfirmationsSetting value=\"2\" id=\"Add\" />\n  </component>\n  <component name=\"ProjectViewState\">\n    <option name=\"hideEmptyMiddlePackages\" value=\"true\" />\n    <option name=\"showLibraryContents\" value=\"true\" />\n  </component>\n  <component name=\"PropertiesComponent\">{\n  &quot;keyToString&quot;: {\n    &quot;Python.main.executor&quot;: &quot;Run&quot;,\n    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,\n    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,\n    &quot;git-widget-placeholder&quot;: &quot;statevector__sim&quot;,\n    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,\n    &quot;ignore_missing_gitignore&quot;: &quot;true&quot;,\n    &quot;last_opened_file_path&quot;: &quot;C:/Users/Andrew Liang/PycharmProjects/Trotter_ITE&quot;,\n    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,\n    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,\n    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,\n    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,\n    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,\n    &quot;settings.editor.selected.configurable&quot;: &quot;editor.preferences.completion&quot;\n  }\n}</component>\n  <component name=\"RunManager\">\n    <configuration name=\"main\" type=\"PythonConfigurationType\" factoryName=\"Python\" temporary=\"true\" nameIsGenerated=\"true\">\n      <module name=\"Trotter_ITE\" />\n      <option name=\"ENV_FILES\" value=\"\" />\n      <option name=\"INTERPRETER_OPTIONS\" value=\"\" />\n      <option name=\"PARENT_ENVS\" value=\"true\" />\n      <envs>\n        <env name=\"PYTHONUNBUFFERED\" value=\"1\" />\n      </envs>\n      <option name=\"SDK_HOME\" value=\"\" />\n      <option name=\"WORKING_DIRECTORY\" value=\"$PROJECT_DIR$\" />\n      <option name=\"IS_MODULE_SDK\" value=\"true\" />\n      <option name=\"ADD_CONTENT_ROOTS\" value=\"true\" />\n      <option name=\"ADD_SOURCE_ROOTS\" value=\"true\" />\n      <EXTENSION ID=\"PythonCoverageRunConfigurationExtension\" runner=\"coverage.py\" />\n      <option name=\"SCRIPT_NAME\" value=\"$PROJECT_DIR$/main.py\" />\n      <option name=\"PARAMETERS\" value=\"\" />\n      <option name=\"SHOW_COMMAND_LINE\" value=\"false\" />\n      <option name=\"EMULATE_TERMINAL\" value=\"false\" />\n      <option name=\"MODULE_MODE\" value=\"false\" />\n      <option name=\"REDIRECT_INPUT\" value=\"false\" />\n      <option name=\"INPUT_FILE\" value=\"\" />\n      <method v=\"2\" />\n    </configuration>\n    <recent_temporary>\n      <list>\n        <item itemvalue=\"Python.main\" />\n      </list>\n    </recent_temporary>\n  </component>\n  <component name=\"SpellCheckerSettings\" RuntimeDictionaries=\"0\" Folders=\"0\" CustomDictionaries=\"0\" DefaultDictionary=\"application-level\" UseSingleDictionary=\"true\" transferred=\"true\" />\n  <component name=\"TaskManager\">\n    <task active=\"true\" id=\"Default\" summary=\"Default task\">\n      <changelist id=\"897876e3-3587-4317-b1da-ea2e97d09b7a\" name=\"Changes\" comment=\"\" />\n      <created>1706921484092</created>\n      <option name=\"number\" value=\"Default\" />\n      <option name=\"presentableId\" value=\"Default\" />\n      <updated>1706921484092</updated>\n      <workItem from=\"1706921487828\" duration=\"2801000\" />\n      <workItem from=\"1708131941459\" duration=\"2589000\" />\n      <workItem from=\"1708301312117\" duration=\"1534000\" />\n      <workItem from=\"1708713564900\" duration=\"7085000\" />\n      <workItem from=\"1708823438421\" duration=\"7614000\" />\n      <workItem from=\"1708937485581\" duration=\"5417000\" />\n      <workItem from=\"1709226408698\" duration=\"386000\" />\n      <workItem from=\"1709226805968\" duration=\"5759000\" />\n      <workItem from=\"1709653045837\" duration=\"9192000\" />\n      <workItem from=\"1710037292699\" duration=\"16186000\" />\n      <workItem from=\"1710108347778\" duration=\"10202000\" />\n      <workItem from=\"1710152077303\" duration=\"10280000\" />\n      <workItem from=\"1710191717091\" duration=\"70000\" />\n      <workItem from=\"1710256125881\" duration=\"64000\" />\n      <workItem from=\"1710259833233\" duration=\"276000\" />\n      <workItem from=\"1710268591915\" duration=\"432000\" />\n      <workItem from=\"1710281249038\" duration=\"6385000\" />\n    </task>\n    <task id=\"LOCAL-00001\" summary=\"rewrote\">\n      <option name=\"closed\" value=\"true\" />\n      <created>1710094071617</created>\n      <option name=\"number\" value=\"00001\" />\n      <option name=\"presentableId\" value=\"LOCAL-00001\" />\n      <option name=\"project\" value=\"LOCAL\" />\n      <updated>1710094071617</updated>\n    </task>\n    <task id=\"LOCAL-00002\" summary=\"snapshot before shifting the circuits\">\n      <option name=\"closed\" value=\"true\" />\n      <created>1710098265149</created>\n      <option name=\"number\" value=\"00002\" />\n      <option name=\"presentableId\" value=\"LOCAL-00002\" />\n      <option name=\"project\" value=\"LOCAL\" />\n      <updated>1710098265149</updated>\n    </task>\n    <option name=\"localTasksCounter\" value=\"3\" />\n    <servers />\n  </component>\n  <component name=\"TypeScriptGeneratedFilesManager\">\n    <option name=\"version\" value=\"3\" />\n  </component>\n  <component name=\"VcsManagerConfiguration\">\n    <MESSAGE value=\"rewrote\" />\n    <MESSAGE value=\"snapshot before shifting the circuits\" />\n    <option name=\"LAST_COMMIT_MESSAGE\" value=\"snapshot before shifting the circuits\" />\n  </component>\n  <component name=\"com.intellij.coverage.CoverageDataManagerImpl\">\n    <SUITE FILE_PATH=\"coverage/PITE$main.coverage\" NAME=\"main Coverage Results\" MODIFIED=\"1709659417526\" SOURCE_PROVIDER=\"com.intellij.coverage.DefaultCoverageFileProvider\" RUNNER=\"coverage.py\" COVERAGE_BY_TEST_ENABLED=\"true\" COVERAGE_TRACING_ENABLED=\"false\" WORKING_DIRECTORY=\"$PROJECT_DIR$\" />\n    <SUITE FILE_PATH=\"coverage/Trotter_ITE$main.coverage\" NAME=\"main Coverage Results\" MODIFIED=\"1708300843009\" SOURCE_PROVIDER=\"com.intellij.coverage.DefaultCoverageFileProvider\" RUNNER=\"coverage.py\" COVERAGE_BY_TEST_ENABLED=\"true\" COVERAGE_TRACING_ENABLED=\"false\" WORKING_DIRECTORY=\"$PROJECT_DIR$\" />\n  </component>\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/workspace.xml b/.idea/workspace.xml
+--- a/.idea/workspace.xml	(revision 93042deaccf935d184f21562fa3830c9a3a99cfd)
++++ b/.idea/workspace.xml	(date 1710346123646)
+@@ -4,13 +4,10 @@
+     <option name="autoReloadType" value="SELECTIVE" />
+   </component>
+   <component name="ChangeListManager">
+-    <list default="true" id="897876e3-3587-4317-b1da-ea2e97d09b7a" name="Changes" comment="snapshot before shifting the circuits">
+-      <change afterPath="$PROJECT_DIR$/additional_analysis.py" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/test.py" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/generator.py" beforeDir="false" />
+-      <change beforePath="$PROJECT_DIR$/hardcoded_circuits.py" beforeDir="false" afterPath="$PROJECT_DIR$/tools.py" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
++    <list default="true" id="897876e3-3587-4317-b1da-ea2e97d09b7a" name="Changes" comment="PITE fully working. Evolving statevector analytically WIP">
++      <change afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+     </list>
+     <option name="SHOW_DIALOG" value="false" />
+     <option name="HIGHLIGHT_CONFLICTS" value="true" />
+@@ -48,6 +45,9 @@
+   </component>
+   <component name="MacroExpansionManager">
+     <option name="directoryName" value="8emu7olc" />
++  </component>
++  <component name="MarkdownSettingsMigration">
++    <option name="stateVersion" value="1" />
+   </component>
+   <component name="ProjectColorInfo">{
+   &quot;associatedIndex&quot;: 3
+@@ -60,23 +60,23 @@
+     <option name="hideEmptyMiddlePackages" value="true" />
+     <option name="showLibraryContents" value="true" />
+   </component>
+-  <component name="PropertiesComponent">{
+-  &quot;keyToString&quot;: {
+-    &quot;Python.main.executor&quot;: &quot;Run&quot;,
+-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+-    &quot;git-widget-placeholder&quot;: &quot;statevector__sim&quot;,
+-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+-    &quot;ignore_missing_gitignore&quot;: &quot;true&quot;,
+-    &quot;last_opened_file_path&quot;: &quot;C:/Users/Andrew Liang/PycharmProjects/Trotter_ITE&quot;,
+-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+-    &quot;settings.editor.selected.configurable&quot;: &quot;editor.preferences.completion&quot;
++  <component name="PropertiesComponent"><![CDATA[{
++  "keyToString": {
++    "Python.main.executor": "Run",
++    "RunOnceActivity.OpenProjectViewOnStart": "true",
++    "RunOnceActivity.ShowReadmeOnStart": "true",
++    "git-widget-placeholder": "statevector__sim",
++    "ignore.virus.scanning.warn.message": "true",
++    "ignore_missing_gitignore": "true",
++    "last_opened_file_path": "C:/Users/Andrew Liang/PycharmProjects/Trotter_ITE",
++    "node.js.detected.package.eslint": "true",
++    "node.js.detected.package.tslint": "true",
++    "node.js.selected.package.eslint": "(autodetect)",
++    "node.js.selected.package.tslint": "(autodetect)",
++    "nodejs_package_manager_path": "npm",
++    "settings.editor.selected.configurable": "preferences.pluginManager"
+   }
+-}</component>
++}]]></component>
+   <component name="RunManager">
+     <configuration name="main" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+       <module name="Trotter_ITE" />
+@@ -132,6 +132,7 @@
+       <workItem from="1710259833233" duration="276000" />
+       <workItem from="1710268591915" duration="432000" />
+       <workItem from="1710281249038" duration="6385000" />
++      <workItem from="1710345628771" duration="495000" />
+     </task>
+     <task id="LOCAL-00001" summary="rewrote">
+       <option name="closed" value="true" />
+@@ -149,7 +150,15 @@
+       <option name="project" value="LOCAL" />
+       <updated>1710098265149</updated>
+     </task>
+-    <option name="localTasksCounter" value="3" />
++    <task id="LOCAL-00003" summary="PITE fully working. Evolving statevector analytically WIP">
++      <option name="closed" value="true" />
++      <created>1710345670893</created>
++      <option name="number" value="00003" />
++      <option name="presentableId" value="LOCAL-00003" />
++      <option name="project" value="LOCAL" />
++      <updated>1710345670894</updated>
++    </task>
++    <option name="localTasksCounter" value="4" />
+     <servers />
+   </component>
+   <component name="TypeScriptGeneratedFilesManager">
+@@ -158,7 +167,8 @@
+   <component name="VcsManagerConfiguration">
+     <MESSAGE value="rewrote" />
+     <MESSAGE value="snapshot before shifting the circuits" />
+-    <option name="LAST_COMMIT_MESSAGE" value="snapshot before shifting the circuits" />
++    <MESSAGE value="PITE fully working. Evolving statevector analytically WIP" />
++    <option name="LAST_COMMIT_MESSAGE" value="PITE fully working. Evolving statevector analytically WIP" />
+   </component>
+   <component name="com.intellij.coverage.CoverageDataManagerImpl">
+     <SUITE FILE_PATH="coverage/PITE$main.coverage" NAME="main Coverage Results" MODIFIED="1709659417526" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
