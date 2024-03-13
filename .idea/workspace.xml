@@ -4,10 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="897876e3-3587-4317-b1da-ea2e97d09b7a" name="Changes" comment="">
+    <list default="true" id="897876e3-3587-4317-b1da-ea2e97d09b7a" name="Changes" comment="snapshot before shifting the circuits">
+      <change afterPath="$PROJECT_DIR$/additional_analysis.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/generator.py" beforeDir="false" afterPath="$PROJECT_DIR$/generator.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/hardcoded_circuits.py" beforeDir="false" afterPath="$PROJECT_DIR$/hardcoded_circuits.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/generator.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/hardcoded_circuits.py" beforeDir="false" afterPath="$PROJECT_DIR$/tools.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -23,7 +25,26 @@
     </option>
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="master" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;andrew-liang-2001&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">
+    <option name="selectedUrlAndAccountId">
+      <UrlAndAccount>
+        <option name="accountId" value="d8578f25-b873-4412-aa49-e86089af68c8" />
+        <option name="url" value="https://github.com/andrew-liang-2001/PITE.git" />
+      </UrlAndAccount>
+    </option>
   </component>
   <component name="MacroExpansionManager">
     <option name="directoryName" value="8emu7olc" />
@@ -44,7 +65,7 @@
     &quot;Python.main.executor&quot;: &quot;Run&quot;,
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;statevector__sim&quot;,
     &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
     &quot;ignore_missing_gitignore&quot;: &quot;true&quot;,
     &quot;last_opened_file_path&quot;: &quot;C:/Users/Andrew Liang/PycharmProjects/Trotter_ITE&quot;,
@@ -53,7 +74,7 @@
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.keymap&quot;
+    &quot;settings.editor.selected.configurable&quot;: &quot;editor.preferences.completion&quot;
   }
 }</component>
   <component name="RunManager">
@@ -103,12 +124,41 @@
       <workItem from="1709226408698" duration="386000" />
       <workItem from="1709226805968" duration="5759000" />
       <workItem from="1709653045837" duration="9192000" />
-      <workItem from="1710037292699" duration="6032000" />
+      <workItem from="1710037292699" duration="16186000" />
+      <workItem from="1710108347778" duration="10202000" />
+      <workItem from="1710152077303" duration="10280000" />
+      <workItem from="1710191717091" duration="70000" />
+      <workItem from="1710256125881" duration="64000" />
+      <workItem from="1710259833233" duration="276000" />
+      <workItem from="1710268591915" duration="432000" />
+      <workItem from="1710281249038" duration="6385000" />
     </task>
+    <task id="LOCAL-00001" summary="rewrote">
+      <option name="closed" value="true" />
+      <created>1710094071617</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1710094071617</updated>
+    </task>
+    <task id="LOCAL-00002" summary="snapshot before shifting the circuits">
+      <option name="closed" value="true" />
+      <created>1710098265149</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1710098265149</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="rewrote" />
+    <MESSAGE value="snapshot before shifting the circuits" />
+    <option name="LAST_COMMIT_MESSAGE" value="snapshot before shifting the circuits" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/PITE$main.coverage" NAME="main Coverage Results" MODIFIED="1709659417526" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />

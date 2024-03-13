@@ -1,319 +1,126 @@
-from qiskit import QuantumCircuit, QuantumRegister, ClassicalRegister, transpile
-import numpy as np
-from qiskit_nature.second_q.mappers import JordanWignerMapper
-from qiskit_nature.second_q.hamiltonians.lattices import LineLattice, BoundaryCondition
-import qiskit_nature.second_q.hamiltonians as h
+from tools import *
 import matplotlib.pyplot as plt
-from qiskit_aer import Aer
-from qiskit.quantum_info import Statevector, Pauli, partial_trace
-from qiskit.quantum_info.operators import Operator
-import scienceplots
+import qiskit_nature.second_q.hamiltonians as h
+from qiskit_nature.second_q.hamiltonians.lattices import LineLattice, BoundaryCondition
+from qiskit_nature.second_q.mappers import JordanWignerMapper
+from scipy.linalg import expm
 plt.style.use('science')
-
-from qiskit.visualization import plot_histogram
-
-backend = Aer.get_backend("statevector_simulator")
-
-# def generate_circuits(Pauli_op, phi) -> [QuantumCircuit]:
-#     """
-#     Generate quantum circuits for each Pauli string in the qubit Hamiltonian.
-#     :param Pauli_op: Pauli operator object from the qiskit_nature library.
-#     :param phi: Rotation angle for the CRX gate.
-#     :return: List of quantum circuits for each Pauli string.
-#     """
-#     Pauli_circuits = []
-#     for Pauli in Pauli_op:
-#         string = Pauli.paulis.to_labels()
-#         coeff = Pauli.coeffs[0].real  # All coefficients should be real in this project, so just check real component.
-#         num_qubits = len(string)
-#
-#         qc = QuantumCircuit(QuantumRegister(1, "anc"), QuantumRegister(4), ClassicalRegister(1))
-#
-#         for i, pauli_gate in enumerate(string):
-#             if pauli_gate == "X":
-#                 qc.h(i + 1)  # offset 1 for the ancillary qubit
-#             elif pauli_gate == "Y":
-#                 qc.sdg(i + 1)
-#                 qc.h(i + 1)
-#
-#         # Implement the controlled-NOT chain.
-#         non_identity_indices = [i for i, gate in enumerate(string) if gate != "I"]
-#         for i in range(len(non_identity_indices) - 1):
-#             qc.cx(non_identity_indices[i] + 1, non_identity_indices[i + 1] + 1)
-#
-#         # Apply CRX gate with the ancilla.
-#         if non_identity_indices:
-#             # Apply X gates to the ancilla for a negatively controlled action
-#             if coeff > 0:
-#                 qc.x(non_identity_indices[-1] + 1)
-#             qc.crx(phi, non_identity_indices[-1] + 1, 0)  # Apply CRX gate
-#             if coeff > 0:
-#                 qc.x(non_identity_indices[-1] + 1)
-#
-#         # Measurement of the ancilla qubit.
-#         qc.measure(0, 0)
-#         qc.reset(0)
-#
-#         # Reverse the CNOT operations.
-#         for i in reversed(range(len(non_identity_indices) - 1)):
-#             qc.cx(non_identity_indices[i] + 1, non_identity_indices[i + 1] + 1)
-#
-#         # Reverse the gate applications for X and Y gates based on the Pauli string.
-#         for i, pauli_gate in enumerate(reversed(string)):
-#             if pauli_gate == "Y":
-#                 qc.h(num_qubits - i)  # Apply Hadamard gate in reverse order.
-#                 qc.s(num_qubits - i)  # Apply S gate to reverse the earlier S dagger gate.
-#             elif pauli_gate == "X":
-#                 qc.h(num_qubits - i)  # Apply Hadamard gate in reverse order.
-#
-#         # Append the configured circuit to the list of circuits.
-#         Pauli_circuits.append(qc)
-#
-#     return Pauli_circuits
-
-
 # %% 4 site 1D Ising model
 
 line_TIM_lattice = LineLattice(4, boundary_condition=BoundaryCondition.PERIODIC)
 
-ising_model = h.IsingModel(line_TIM_lattice.uniform_parameters(1.0, 0.0))
-print(ising_model)
+ising_model = h.IsingModel(line_TIM_lattice.uniform_parameters(0.5, 0.1))
+TIM_op = SparsePauliOp(data=["ZZII", "IZZI", "IIZZ", "XIII", "IXII", "IIXI", "IIIX", "ZIIZ"],
+                       coeffs=[0.5, 0.5, 0.5, 0.1, 0.1, 0.1, 0.1, 0.5])
+
+# print(TIM_op.to_matrix())
+TIM_eigenvalues, TIM_eigenvectors = np.linalg.eig(TIM_op.to_matrix())
+TIM_diagonal = np.diag(TIM_eigenvalues)
+# P_inv = np.linalg.inv(TIM_eigenvectors)
+# print(TIM_eigenvectors @ TIM_diagonal @ P_inv)
 
 # %% 2 site 1D Hubbard model
-delta_tau = 0.1
-gamma = 1
-phi = 2 * np.arccos(np.exp(-2 * np.abs(gamma) * delta_tau))
+DELTA_TAU = 0.1
 
 line_FHM_lattice = LineLattice(2, boundary_condition=BoundaryCondition.PERIODIC)
-fermi_hubbard = h.FermiHubbardModel(line_FHM_lattice.uniform_parameters(-0.1, -0.1), onsite_interaction=0.1)
-print(fermi_hubbard.interaction_matrix())
-
+fermi_hubbard = h.FermiHubbardModel(line_FHM_lattice.uniform_parameters(uniform_interaction=-0.1,
+                                                                        uniform_onsite_potential=0.0),
+                                    onsite_interaction=0.1)
 fermionic_op = fermi_hubbard.second_q_op()
-qubit_jw_op = JordanWignerMapper().map(fermionic_op)
-diagonalised_FHM = np.linalg.eigh(qubit_jw_op.to_matrix())
+FHM_op = JordanWignerMapper().map(fermionic_op)
+FHM_eigenvalues, FHM_eigenvectors = np.linalg.eigh(FHM_op.to_matrix())
+FHM_diagonal = np.diag(FHM_eigenvalues)
 
-print(f"Number of Pauli strings: {len(qubit_jw_op)}")
-print(qubit_jw_op)
+# print(f"Number of Pauli strings: {len(FHM_op)}")
 
-
-# %%
-
-def generate_circuit(Statevector, Pauli) -> QuantumCircuit:
-    gamma = Pauli[1]
-    phi = 2 * np.arccos(np.exp(-2 * np.abs(gamma) * delta_tau))
-
-    if Pauli[0] == "IYZY":
-        IYZY = QuantumCircuit(QuantumRegister(1, "anc"), QuantumRegister(4), ClassicalRegister(1, "c"))
-        IYZY.initialize(Statevector, [1, 2, 3, 4])
-        IYZY.sdg(2)
-        IYZY.h(2)
-        IYZY.sdg(4)
-        IYZY.h(4)
-        IYZY.cx(2, 3)
-        IYZY.cx(3, 4)
-        IYZY.crx(phi, 4, 0)
-        IYZY.cx(3, 4)
-        IYZY.cx(2, 3)
-        IYZY.h(4)
-        IYZY.s(4)
-        IYZY.h(2)
-        IYZY.s(2)
-        return IYZY
-    elif Pauli[0] == "IXZX":
-        IXZX = QuantumCircuit(QuantumRegister(1, "anc"), QuantumRegister(4), ClassicalRegister(1))
-        IXZX.initialize(Statevector, [1, 2, 3, 4])
-        IXZX.h(2)
-        IXZX.h(4)
-        IXZX.cx(2, 3)
-        IXZX.cx(3, 4)
-        IXZX.crx(phi, 4, 0)
-        IXZX.cx(3, 4)
-        IXZX.cx(2, 3)
-        IXZX.h(4)
-        IXZX.h(2)
-        return IXZX
-    elif Pauli[0] == "IIII":
-        IIII = QuantumCircuit(QuantumRegister(1, "anc"), QuantumRegister(4), ClassicalRegister(1))
-        IIII.initialize(Statevector, [1, 2, 3, 4])
-        return IIII
-    elif Pauli[0] == "IIIZ":
-        IIIZ = QuantumCircuit(QuantumRegister(1, "anc"), QuantumRegister(4), ClassicalRegister(1))
-        IIIZ.initialize(Statevector, [1, 2, 3, 4])
-        IIIZ.x(4)
-        IIIZ.crx(phi, 4, 2)
-        IIIZ.x(4)
-        return IIIZ
-    elif Pauli[0] == "IZII":
-        IZII = QuantumCircuit(QuantumRegister(1, "anc"), QuantumRegister(4), ClassicalRegister(1))
-        IZII.initialize(Statevector, [1, 2, 3, 4])
-        IZII.x(2)
-        IZII.crx(phi, 2, 3)
-        IZII.x(2)
-        return IZII
-    elif Pauli[0] == "YZYI":
-        YZYI = QuantumCircuit(QuantumRegister(1, "anc"), QuantumRegister(4), ClassicalRegister(1))
-        YZYI.initialize(Statevector, [1, 2, 3, 4])
-        YZYI.sdg(1)
-        YZYI.h(1)
-        YZYI.sdg(3)
-        YZYI.h(3)
-        YZYI.cx(1, 2)
-        YZYI.cx(2, 3)
-        YZYI.crx(phi, 3, 0)
-        YZYI.cx(2, 3)
-        YZYI.cx(1, 2)
-        YZYI.h(3)
-        YZYI.s(3)
-        YZYI.h(1)
-        YZYI.s(1)
-        return YZYI
-    elif Pauli[0] == "XZXI":
-        XZXI = QuantumCircuit(QuantumRegister(1, "anc"), QuantumRegister(4), ClassicalRegister(1))
-        XZXI.initialize(Statevector, [1, 2, 3, 4])
-        XZXI.h(1)
-        XZXI.h(3)
-        XZXI.cx(1, 2)
-        XZXI.cx(2, 3)
-        XZXI.crx(phi, 3, 0)
-        XZXI.cx(2, 3)
-        XZXI.cx(1, 2)
-        XZXI.h(3)
-        XZXI.h(1)
-        return XZXI
-    elif Pauli[0] == "IIZI":
-        IIZI = QuantumCircuit(QuantumRegister(1, "anc"), QuantumRegister(4), ClassicalRegister(1))
-        IIZI.initialize(Statevector, [1, 2, 3, 4])
-        IIZI.x(3)
-        IIZI.crx(phi, 3, 0)
-        IIZI.x(3)
-        return IIZI
-    elif Pauli[0] == "ZIII":
-        ZIII = QuantumCircuit(QuantumRegister(1, "anc"), QuantumRegister(4), ClassicalRegister(1))
-        ZIII.initialize(Statevector, [1, 2, 3, 4])
-        ZIII.x(1)
-        ZIII.crx(phi, 1, 0)
-        ZIII.x(1)
-        return ZIII
-    elif Pauli[0] == "IIZZ":
-        IIZZ = QuantumCircuit(QuantumRegister(1, "anc"), QuantumRegister(4), ClassicalRegister(1))
-        IIZZ.initialize(Statevector, [1, 2, 3, 4])
-        IIZZ.cx(3, 4)
-        IIZZ.x(4)
-        IIZZ.crx(phi, 4, 0)
-        IIZZ.x(4)
-        IIZZ.cx(3, 4)
-        return IIZZ
-    elif Pauli[0] == "ZZII":
-        ZZII = QuantumCircuit(QuantumRegister(1, "anc"), QuantumRegister(4), ClassicalRegister(1))
-        ZZII.initialize(Statevector, [1, 2, 3, 4])
-        ZZII.cx(1, 2)
-        ZZII.x(2)
-        ZZII.crx(phi, 2, 0)
-        ZZII.x(2)
-        ZZII.cx(1, 2)
-        return ZZII
-
-
-# %%
-
-
-
-# %%
-statevector = Statevector.from_label("0000")
-Pauli_expectations = []
-Energy = []
-
-n_trotter_steps = 60
-
-
-def compute_Hamiltonian_energy(Pauli_expectations, coefficients):
-    return np.dot(Pauli_expectations, coefficients).real
-
-
-for _ in range(n_trotter_steps):
-    for Pauli_coeff_tuple in qubit_jw_op.to_list():
-        circ = generate_circuit(statevector, Pauli_coeff_tuple)
-        circ = transpile(circ, backend, basis_gates=["sdg", "s", "h", "cx", "ry"])
-        job = backend.run(circ)
-        result = job.result()
-        statevector = result.get_statevector()
-        reduced_state = statevector.data[::2] / np.linalg.norm(statevector.data[::2])
-        statevector = Statevector(reduced_state)  # overwrite the statevector with the reduced state
-        pauli = Pauli(Pauli_coeff_tuple[0])
-        operator = Operator(pauli)
-        expectation_value = statevector.expectation_value(operator)
-        Pauli_expectations.append(expectation_value)
-        print(f"Done with {Pauli_coeff_tuple[0]} with expectation value {expectation_value}")
-    Energy.append(compute_Hamiltonian_energy(Pauli_expectations, qubit_jw_op.coeffs))
-    Pauli_expectations = []
-
-# %%
-plt.plot(np.arange(0, n_trotter_steps), Energy)
-plt.savefig("plots/energy_vs_trotter_steps.pdf", format="pdf", bbox_inches="tight")
-
-# %%
-# initial state preparation for 2 site 1D Hubbard model
+# %% initial state preparation
 theta = np.pi  # produces singlet state 1/sqrt(2) |0110> - |1001>
-
-FHM_init = QuantumCircuit(QuantumRegister(1, "anc"), QuantumRegister(4), ClassicalRegister(10))
-FHM_init.h(1)
-FHM_init.ry(theta, 1)
-FHM_init.x(2)
-FHM_init.x(4)
+FHM_init = QuantumCircuit(QuantumRegister(4))
+FHM_init.h(0)
+FHM_init.ry(theta, 0)
+FHM_init.x(1)
+FHM_init.x(3)
+FHM_init.cx(0, 1)
 FHM_init.cx(1, 2)
 FHM_init.cx(2, 3)
-FHM_init.cx(3, 4)
-FHM_init.draw("mpl")
-plt.show()
+statevector_FHM = get_statevector(FHM_init)
 
+#  initial state preparation for 4 site 1D Ising model
+TFIM_init = QuantumCircuit(QuantumRegister(4))
+TFIM_init.h([0, 1, 2, 3])
+statevector_TIM = get_statevector(TFIM_init)
 
 # %%
-np.linalg.eigvalsh(qubit_jw_op.to_matrix())
+trotter_arr_TIM = np.arange(0, 40, 1)
+energy_TIM, probability_TIM = run_experiment(trotter_arr_TIM, statevector_TIM, TIM_op)
+analytical_energy_TIM = []
+lamb_TIM = np.linalg.norm(TIM_op.coeffs, 1)
+analytical_probability_TIM = np.exp(-4 * lamb_TIM * DELTA_TAU * trotter_arr_TIM)
+for r in trotter_arr_TIM:
+    ITE_TIM = Operator(np.exp(-r * DELTA_TAU * TIM_op))
+    evolved_statevector_TIM = statevector_TIM.evolve(ITE_TIM)
+    analytical_energy_TIM.append(expectation_value(TIM_op, evolved_statevector_TIM))
 
-# %% Test circuit to figure out the correct ordering of the qubits.
+# %%
+trotter_arr_FHM = np.arange(0, 60, 1)
+energy_FHM, probability_FHM = run_experiment(trotter_arr_FHM, statevector_FHM, FHM_op)
+analytical_energy_FHM = []
+lamb_FHM = np.linalg.norm(FHM_op.coeffs, 1)
+analytical_probability_FHM = np.exp(-4 * lamb_FHM * DELTA_TAU * trotter_arr_FHM)
+for r in trotter_arr_FHM:
+    ITE_FHM = Operator(np.exp(-r * DELTA_TAU * FHM_op))
+    evolved_statevector_FHM = statevector_FHM.evolve(ITE_FHM)
+    analytical_energy_FHM.append(expectation_value(FHM_op, evolved_statevector_FHM))
 
-test_circuit = QuantumCircuit(QuantumRegister(4))
-test_circuit.x(2)
-test_circuit = transpile(test_circuit, backend)
-test_circuit.draw("mpl")
+# %%
+# lamb = np.linalg.norm(qubit_jw_op.coeffs, 1)
+
+# %% Plot energy vs Trotter steps TIM
+plt.plot(trotter_arr_TIM, energy_TIM, label="PITE")
+plt.plot(trotter_arr_TIM, analytical_energy_TIM, label="Analytical")
+plt.xlabel("Trotter step $r$")
+plt.ylabel("Energy $\langle E \\rangle$")
+plt.show()
+# plt.savefig("plots/TFIM_E_vs_r.pdf", format="pdf", bbox_inches="tight")
+
+# %% Plot energy difference to ground state vs Trotter steps TIM
+TIM_gs_energy = min(TIM_eigenvalues)
+plt.plot(trotter_arr_TIM, energy_TIM - min(TIM_eigenvalues), label="PITE")
+plt.yscale("log")
+plt.xlabel("Trotter step $r$")
+plt.ylabel(r"Energy difference to ground state $\langle E \rangle - E_0$")
 plt.show()
 
-test_statevector = backend.run(test_circuit).result().get_statevector()
-print(test_statevector)
+# %% Plot probability vs Trotter steps TIM
+plt.plot(trotter_arr_TIM, probability_TIM, label="PITE")
+plt.plot(trotter_arr_TIM, np.exp(-4 * lamb_TIM * DELTA_TAU * trotter_arr_TIM), label="Analytical")
+plt.xlabel("Trotter step $r$")
 
-# ordering is 0000, 1000, 0100, 1100, 0010, 1010, 0110, 1110, 0001, 1001, 0101, 1101, 0011, 1011, 0111, 1111
+plt.ylabel("Probability of success $p_s$")
+plt.yscale("log")
+plt.show()
 
-# # %% shots simulation
-# backend = Aer.get_backend("aer_simulator")
-# full_trotter_step = transpile(full_trotter_step, backend, basis_gates=["sdg", "s", "h", "cx", "ry", "measure"])
-#
-# # %%
-#
-# job = backend.run(full_trotter_step, shots=10**5)
-# result = job.result()
-# counts = result.get_counts()
-#
-#
-# def proportion_of_zeros(counts):
-#     return counts.get("0", 0) / sum(counts.values())
-#
-#
-# print(proportion_of_zeros(counts))
-#
-# # %%
-#
-#
-# def is_key_all_zeros(d):
-#     for key in d.keys():
-#         if all(char == '0' for char in key):
-#             return True
-#     return False
-#
-#
-# while not is_key_all_zeros(counts):
-#     job = backend.run(full_trotter_step, shots=1)
-#     result = job.result()
-#     counts = result.get_counts()
-#
-# print(counts)
-#
+# %% Plot energy vs Trotter steps FHM
+plt.plot(trotter_arr_FHM, energy_FHM, label="PITE")
+plt.plot(trotter_arr_FHM, analytical_energy_FHM, label="Analytical")
+print(min(energy_FHM))
+plt.xlabel("Trotter step $r$")
+plt.ylabel("Energy $\langle E \\rangle$")
+plt.show()
+
+# %% Plot energy difference to ground state vs Trotter steps FHM
+FHM_gs_energy = min(FHM_eigenvalues)
+plt.plot(trotter_arr_FHM, energy_FHM - min(FHM_eigenvalues), label="PITE")
+plt.yscale("log")
+plt.xlabel("Trotter step $r$")
+plt.ylabel(r"Energy difference to ground state $\langle E \rangle - E_0$")
+plt.show()
+
+# %% Plot probability vs Trotter steps FHM
+plt.plot(trotter_arr_FHM, probability_FHM, label="PITE")
+plt.plot(trotter_arr_FHM, np.exp(-4 * lamb_FHM * DELTA_TAU * trotter_arr_FHM), label="Analytical")
+plt.legend()
+plt.xlabel("Trotter step $r$")
+plt.ylabel("Probability of success $p_s$")
+plt.yscale("log")
+plt.show()
