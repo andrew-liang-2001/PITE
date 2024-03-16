@@ -46,12 +46,11 @@ def generate_circuit(statevector: Statevector, Pauli_coeff_pair: SparsePauliOp) 
     string = Pauli_coeff_pair[0]
     coeff = Pauli_coeff_pair[1].real
     DELTA_TAU = 0.1
-    num_qubits = 4
+    num_qubits = len(string)
     phi = 2 * np.arccos(np.exp(-2 * np.abs(coeff) * DELTA_TAU))
-    # print(f"Pauli string: {string}, Coefficient: {coeff}, phi: {phi}")
 
-    qc = QuantumCircuit(QuantumRegister(1, "anc"), QuantumRegister(4))
-    qc.initialize(statevector, [1, 2, 3, 4])
+    qc = QuantumCircuit(QuantumRegister(1, "anc"), QuantumRegister(num_qubits))
+    qc.initialize(statevector, list(np.arange(1, num_qubits+1)))
 
     for i, pauli_gate in enumerate(string):
         if pauli_gate == "X":
@@ -81,8 +80,8 @@ def generate_circuit(statevector: Statevector, Pauli_coeff_pair: SparsePauliOp) 
 
     # print(np.dot(new_statevector.data, new_statevector.data.conj()))
     # print(new_statevector.data)
-    qc2 = QuantumCircuit(QuantumRegister(1, "anc"), QuantumRegister(4))
-    qc2.initialize(new_statevector, [1, 2, 3, 4])
+    qc2 = QuantumCircuit(QuantumRegister(1, "anc"), QuantumRegister(num_qubits))
+    qc2.initialize(new_statevector, list(np.arange(1, num_qubits+1)))
 
     # Reverse the CNOT operations.
     for i in reversed(range(len(non_identity_indices) - 1)):
@@ -147,3 +146,8 @@ def run_experiment(trotter_arr: np.ndarray, statevector_initial: Statevector, qu
             p_success *= prob
         probability_list.append(p_success)
     return energy_list, probability_list
+
+
+def matrix_expectation(matrix, statevector_array: np.ndarray):
+    statevector_conj = statevector_array.transpose().conj()
+    return statevector_conj @ matrix @ statevector_array

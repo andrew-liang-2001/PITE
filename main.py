@@ -3,8 +3,20 @@ import matplotlib.pyplot as plt
 import qiskit_nature.second_q.hamiltonians as h
 from qiskit_nature.second_q.hamiltonians.lattices import LineLattice, BoundaryCondition
 from qiskit_nature.second_q.mappers import JordanWignerMapper
-from scipy.linalg import expm
+import qiskit_algorithms as qalgs
+import matplotlib as mpl
+
 plt.style.use('science')
+plt.rcParams.update({
+    "font.size": 10,
+    "figure.figsize": (3.055555, 3.055555),
+    "axes.labelsize": 10,
+    "legend.fontsize": 10,
+    "xtick.labelsize": 8,
+    "ytick.labelsize": 8,
+    "axes.prop_cycle": mpl.cycler(color=["red", "green"])
+})
+
 # %% 4 site 1D Ising model
 
 line_TIM_lattice = LineLattice(4, boundary_condition=BoundaryCondition.PERIODIC)
@@ -16,6 +28,8 @@ TIM_op = SparsePauliOp(data=["ZZII", "IZZI", "IIZZ", "XIII", "IXII", "IIXI", "II
 # print(TIM_op.to_matrix())
 TIM_eigenvalues, TIM_eigenvectors = np.linalg.eig(TIM_op.to_matrix())
 TIM_diagonal = np.diag(TIM_eigenvalues)
+# TIM_gs_energy = min(TIM_eigenvalues)
+# print(f"Ground state energy: {TIM_gs_energy}")
 # P_inv = np.linalg.inv(TIM_eigenvectors)
 # print(TIM_eigenvectors @ TIM_diagonal @ P_inv)
 
@@ -50,77 +64,104 @@ TFIM_init = QuantumCircuit(QuantumRegister(4))
 TFIM_init.h([0, 1, 2, 3])
 statevector_TIM = get_statevector(TFIM_init)
 
+
 # %%
-trotter_arr_TIM = np.arange(0, 40, 1)
+MAX_TROTTER_STEPS_TIM = 40
+solver = qalgs.SciPyImaginaryEvolver(MAX_TROTTER_STEPS_TIM)
+
+trotter_arr_TIM = np.arange(0, MAX_TROTTER_STEPS_TIM, 1)
 energy_TIM, probability_TIM = run_experiment(trotter_arr_TIM, statevector_TIM, TIM_op)
 analytical_energy_TIM = []
 lamb_TIM = np.linalg.norm(TIM_op.coeffs, 1)
 analytical_probability_TIM = np.exp(-4 * lamb_TIM * DELTA_TAU * trotter_arr_TIM)
 for r in trotter_arr_TIM:
-    ITE_TIM = Operator(np.exp(-r * DELTA_TAU * TIM_op))
-    evolved_statevector_TIM = statevector_TIM.evolve(ITE_TIM)
+    # ITE_TIM = Operator(np.exp(-r * DELTA_TAU * TIM_op))
+    # ITE_TIM = np.exp(-r * DELTA_TAU * TIM_diagonal)
+
+    # ITE_TIM = expm(-r * DELTA_TAU * TIM_op.to_matrix())
+    # evolved_statevector_TIM = ITE_TIM @ statevector_TIM.data
+    problem = qalgs.TimeEvolutionProblem(hamiltonian=TIM_op, initial_state=statevector_TIM, time=r * DELTA_TAU)
+    result = solver.evolve(evolution_problem=problem)
+    evolved_statevector_TIM = result.evolved_state
+
+    # evolved_statevector_TIM = statevector_TIM.evolve(ITE_TIM)
     analytical_energy_TIM.append(expectation_value(TIM_op, evolved_statevector_TIM))
 
+    # analytical_energy_TIM.append(matrix_expectation(TIM_diagonal, evolved_statevector_TIM))
 # %%
-trotter_arr_FHM = np.arange(0, 60, 1)
+MAX_TROTTER_STEPS_FHM = 60
+solver = qalgs.SciPyImaginaryEvolver(MAX_TROTTER_STEPS_FHM)
+
+trotter_arr_FHM = np.arange(0, MAX_TROTTER_STEPS_FHM, 1)
 energy_FHM, probability_FHM = run_experiment(trotter_arr_FHM, statevector_FHM, FHM_op)
 analytical_energy_FHM = []
 lamb_FHM = np.linalg.norm(FHM_op.coeffs, 1)
 analytical_probability_FHM = np.exp(-4 * lamb_FHM * DELTA_TAU * trotter_arr_FHM)
 for r in trotter_arr_FHM:
     ITE_FHM = Operator(np.exp(-r * DELTA_TAU * FHM_op))
-    evolved_statevector_FHM = statevector_FHM.evolve(ITE_FHM)
+    problem = qalgs.TimeEvolutionProblem(hamiltonian=FHM_op, initial_state=statevector_FHM, time=r * DELTA_TAU)
+    result = solver.evolve(evolution_problem=problem)
+    evolved_statevector_FHM = result.evolved_state
+    # evolved_statevector_FHM = statevector_FHM.evolve(ITE_FHM)
     analytical_energy_FHM.append(expectation_value(FHM_op, evolved_statevector_FHM))
 
-# %%
-# lamb = np.linalg.norm(qubit_jw_op.coeffs, 1)
-
 # %% Plot energy vs Trotter steps TIM
+plt.plot(trotter_arr_TIM, analytical_energy_TIM, label="Exact")
 plt.plot(trotter_arr_TIM, energy_TIM, label="PITE")
-plt.plot(trotter_arr_TIM, analytical_energy_TIM, label="Analytical")
 plt.xlabel("Trotter step $r$")
 plt.ylabel("Energy $\langle E \\rangle$")
+plt.legend()
+plt.tight_layout()
+plt.savefig("plots/TIM_E_vs_r.pdf", format="pdf", bbox_inches="tight")
 plt.show()
-# plt.savefig("plots/TFIM_E_vs_r.pdf", format="pdf", bbox_inches="tight")
 
 # %% Plot energy difference to ground state vs Trotter steps TIM
-TIM_gs_energy = min(TIM_eigenvalues)
-plt.plot(trotter_arr_TIM, energy_TIM - min(TIM_eigenvalues), label="PITE")
+TIM_gs_energy = qalgs.NumPyMinimumEigensolver().compute_minimum_eigenvalue(TIM_op).eigenvalue
+plt.plot(trotter_arr_TIM, energy_TIM - TIM_gs_energy, label="PITE")
 plt.yscale("log")
 plt.xlabel("Trotter step $r$")
 plt.ylabel(r"Energy difference to ground state $\langle E \rangle - E_0$")
-plt.show()
+plt.tight_layout()
+plt.savefig("plots/TIM_E_diff_vs_r.pdf", format="pdf", bbox_inches="tight")
+# plt.show()
 
 # %% Plot probability vs Trotter steps TIM
 plt.plot(trotter_arr_TIM, probability_TIM, label="PITE")
-plt.plot(trotter_arr_TIM, np.exp(-4 * lamb_TIM * DELTA_TAU * trotter_arr_TIM), label="Analytical")
+plt.plot(trotter_arr_TIM, np.exp(-4 * lamb_TIM * DELTA_TAU * trotter_arr_TIM), label="Exact")
 plt.xlabel("Trotter step $r$")
-
 plt.ylabel("Probability of success $p_s$")
 plt.yscale("log")
+plt.legend()
+# plt.legend()
 plt.show()
 
 # %% Plot energy vs Trotter steps FHM
+plt.plot(trotter_arr_FHM, analytical_energy_FHM, label="Exact")
 plt.plot(trotter_arr_FHM, energy_FHM, label="PITE")
-plt.plot(trotter_arr_FHM, analytical_energy_FHM, label="Analytical")
-print(min(energy_FHM))
 plt.xlabel("Trotter step $r$")
 plt.ylabel("Energy $\langle E \\rangle$")
+plt.legend()
+plt.tight_layout()
+plt.savefig("plots/FHM_E_vs_r.pdf", format="pdf", bbox_inches="tight")
 plt.show()
 
 # %% Plot energy difference to ground state vs Trotter steps FHM
-FHM_gs_energy = min(FHM_eigenvalues)
-plt.plot(trotter_arr_FHM, energy_FHM - min(FHM_eigenvalues), label="PITE")
+FHM_gs_energy = qalgs.NumPyMinimumEigensolver().compute_minimum_eigenvalue(FHM_op).eigenvalue
+plt.plot(trotter_arr_FHM, energy_FHM - FHM_gs_energy, label="PITE")
 plt.yscale("log")
 plt.xlabel("Trotter step $r$")
 plt.ylabel(r"Energy difference to ground state $\langle E \rangle - E_0$")
-plt.show()
+plt.tight_layout()
+plt.savefig("plots/FHM_E_diff_vs_r.pdf", format="pdf", bbox_inches="tight")
+# plt.show()
 
 # %% Plot probability vs Trotter steps FHM
 plt.plot(trotter_arr_FHM, probability_FHM, label="PITE")
-plt.plot(trotter_arr_FHM, np.exp(-4 * lamb_FHM * DELTA_TAU * trotter_arr_FHM), label="Analytical")
+plt.plot(trotter_arr_FHM, np.exp(-4 * lamb_FHM * DELTA_TAU * trotter_arr_FHM), label="Exact")
 plt.legend()
 plt.xlabel("Trotter step $r$")
 plt.ylabel("Probability of success $p_s$")
 plt.yscale("log")
-plt.show()
+plt.tight_layout()
+plt.savefig("plots/FHM_p_vs_r.pdf", format="pdf", bbox_inches="tight")
+# plt.show()
